@@ -6,7 +6,9 @@ module.exports = function(grunt) {
     coffee: {
       compile: {
         files: {
-          'dependency.js': 'dependency.coffee'
+          'dependency.js': 'dependency.coffee',
+          'test/dependency.js': 'dependency.coffee',
+          'test/tests.js': 'test/tests.coffee'
         }
       }
     }
