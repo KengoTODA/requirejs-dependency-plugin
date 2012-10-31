@@ -1,0 +1,21 @@
+{
+  "name": "requirejs-dependency-plugin",
+  "keywords": ["requirejs"],
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=0.6"
+  },
+  "scripts": {
+    "test": "grunt travis --verbose"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    }
+  ],
+  "devDependencies": {
+    "grunt": "0.3.17",
+    "grunt-contrib-coffee": "0.3.2"
+  }
+}

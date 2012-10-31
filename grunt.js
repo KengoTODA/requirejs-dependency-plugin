@@ -15,4 +15,5 @@ module.exports = function(grunt) {
   });
   grunt.loadNpmTasks('grunt-contrib-coffee');
   grunt.registerTask('default', 'coffee qunit');
+  grunt.registerTask('travis', 'coffee qunit');
 };
