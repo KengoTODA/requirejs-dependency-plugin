@@ -44,7 +44,7 @@
             _ref = deps.slice(1);
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               dep = _ref[_i];
-              log.push("'" + uri + "'->'" + (requirejs.toUrl(dep)) + "';");
+              log.push("\"" + uri + "\"->\"" + (requirejs.toUrl(dep)) + "\";");
             }
             return rawCallback.apply(this, args);
           };

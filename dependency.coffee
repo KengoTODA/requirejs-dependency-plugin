@@ -26,7 +26,7 @@ define () ->
         args = Array.prototype.slice.call(arguments)
         args.shift() # remove 'module' from args
         uri = module.uri
-        log.push "'#{uri}'->'#{requirejs.toUrl(dep)}';" for dep in deps[1..] # skip 'module' in deps
+        log.push "\"#{uri}\"->\"#{requirejs.toUrl(dep)}\";" for dep in deps[1..] # skip 'module' in deps
         rawCallback.apply this, args
       if name?
         @amdDefine name, deps, callback
