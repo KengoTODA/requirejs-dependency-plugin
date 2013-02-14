@@ -1,6 +1,6 @@
 (function() {
 
-  define("dependency", function() {
+  define(function() {
     return {
       log: [],
       load: function(targetModule, req, load, config) {

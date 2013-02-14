@@ -1,4 +1,4 @@
-define "dependency", () ->
+define () ->
   log: []
   load: (targetModule, req, load, config) ->
     @replaceDefine()
