@@ -8,7 +8,8 @@
         this.replaceDefine();
         return req([targetModule], function(value) {
           load(value);
-          return _this.restoreDefine();
+          _this.restoreDefine();
+          return _this.printDependency();
         });
       },
       restoreDefine: function() {
@@ -53,7 +54,20 @@
             return _this.amdDefine(deps, callback);
           }
         };
-      }
+      },
+      printDependency: function() {
+        var entry, _i, _len;
+        this.print("digraph dependency {");
+        for (_i = 0, _len = log.length; _i < _len; _i++) {
+          entry = log[_i];
+          this.print("  " + entry);
+        }
+        return this.print("}");
+      },
+      print: str(function() {
+        var _ref;
+        return typeof window !== "undefined" && window !== null ? (_ref = window.console) != null ? _ref.log(str) : void 0 : void 0;
+      })
     };
   });
 

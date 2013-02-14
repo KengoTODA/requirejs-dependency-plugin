@@ -5,6 +5,7 @@ define "dependency", () ->
     req [targetModule], (value) =>
       load value
       @restoreDefine()
+      @printDependency()
   restoreDefine: ->
     window.define = @amdDefine
   replaceDefine: ->
@@ -31,3 +32,11 @@ define "dependency", () ->
         @amdDefine name, deps, callback
       else
         @amdDefine deps, callback
+  printDependency: ->
+    # see DOT language
+    # http://www.graphviz.org/doc/info/lang.html
+    @print "digraph dependency {"
+    @print "  #{entry}" for entry in log
+    @print "}"
+  print: str ->
+    window?.console?.log str
