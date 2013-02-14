@@ -56,18 +56,19 @@
         };
       },
       printDependency: function() {
-        var entry, _i, _len;
+        var entry, _i, _len, _ref;
         this.print("digraph dependency {");
-        for (_i = 0, _len = log.length; _i < _len; _i++) {
-          entry = log[_i];
+        _ref = this.log;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          entry = _ref[_i];
           this.print("  " + entry);
         }
         return this.print("}");
       },
-      print: str(function() {
+      print: function(str) {
         var _ref;
-        return typeof window !== "undefined" && window !== null ? (_ref = window.console) != null ? _ref.log(str) : void 0 : void 0;
-      })
+        return typeof window !== "undefined" && window !== null ? (_ref = window.console) != null ? typeof _ref.log === "function" ? _ref.log(str) : void 0 : void 0 : void 0;
+      }
     };
   });
 

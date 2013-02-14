@@ -36,7 +36,7 @@ define () ->
     # see DOT language
     # http://www.graphviz.org/doc/info/lang.html
     @print "digraph dependency {"
-    @print "  #{entry}" for entry in log
+    @print "  #{entry}" for entry in @log
     @print "}"
-  print: str ->
-    window?.console?.log str
+  print: (str) ->
+    window?.console?.log? str
