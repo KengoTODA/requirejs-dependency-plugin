@@ -23,5 +23,5 @@ asyncTest "dependency plugin replaces define method", 2, () ->
 
 asyncTest "dependency plugin creates log", 2, () ->
   require ["dependency!callar", "dependency"], (callar, dependency) ->
-    deepEqual dependency.log, ["'./callar.js'->'./callee.js';"]
+    deepEqual dependency.log, ["\"./callar.js\"->\"./callee.js\";"]
     start()

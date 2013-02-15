@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>dependency module sample</title></head>
+<body>
+  <script src="https://raw.github.com/jrburke/requirejs/master/require.js"></script>
+  <script>
+    requirejs.config({
+      shim: {
+        'jquery-plugin': 'jquery'
+      }
+    });
+    require(['dependency!main'], function(){});
+  </script>
+</body>
+</html>
+

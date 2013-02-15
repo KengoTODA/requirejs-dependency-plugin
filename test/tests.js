@@ -33,7 +33,7 @@
 
   asyncTest("dependency plugin creates log", 2, function() {
     return require(["dependency!callar", "dependency"], function(callar, dependency) {
-      deepEqual(dependency.log, ["'./callar.js'->'./callee.js';"]);
+      deepEqual(dependency.log, ["\"./callar.js\"->\"./callee.js\";"]);
       return start();
     });
   });

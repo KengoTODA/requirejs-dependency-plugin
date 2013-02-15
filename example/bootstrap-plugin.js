@@ -1,0 +1,2 @@
+define(['bootstrap'],function(){
+});
