@@ -8,12 +8,12 @@ define () ->
       @restoreDefine()
       @printDependency()
   restoreDefine: ->
-    window.define = @amdDefine
+    `define = this.amdDefine`
   replaceDefine: ->
-    @amdDefine = window.define
+    @amdDefine = define
     log = @log
     depended = @depended
-    window.define = (name, deps, callback) =>
+    wrapper = (name, deps, callback) =>
       if (typeof name != "string")
         callback = deps
         deps = name
@@ -38,12 +38,14 @@ define () ->
         @amdDefine name, deps, callback
       else
         @amdDefine deps, callback
+    wrapper.amd = define.amd
+    `define = wrapper`
   printDependency: ->
     # see DOT language
     # http://www.graphviz.org/doc/info/lang.html
-    @print "digraph dependency {"
-    @print "  #{entry}" for entry in @log
-    @print "  #{module} [shape = box]" for module, value of @depended
-    @print "}"
-  print: (str) ->
-    window?.console?.log? str
+    graph  = "digraph dependency {\n"
+    graph += "  #{entry}\n" for entry in @log
+    graph += "  // depended modules\n"
+    graph += "  #{module} [shape = box];\n" for module, value of @depended
+    graph += "}"
+    window?.console?.log? graph

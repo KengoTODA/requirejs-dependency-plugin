@@ -14,15 +14,15 @@
         });
       },
       restoreDefine: function() {
-        return window.define = this.amdDefine;
+        return define = this.amdDefine;
       },
       replaceDefine: function() {
-        var depended, log,
+        var depended, log, wrapper,
           _this = this;
-        this.amdDefine = window.define;
+        this.amdDefine = define;
         log = this.log;
         depended = this.depended;
-        return window.define = function(name, deps, callback) {
+        wrapper = function(name, deps, callback) {
           var rawCallback;
           if (typeof name !== "string") {
             callback = deps;
@@ -60,25 +60,25 @@
             return _this.amdDefine(deps, callback);
           }
         };
+        wrapper.amd = define.amd;
+        return define = wrapper;
       },
       printDependency: function() {
-        var entry, module, value, _i, _len, _ref, _ref1;
-        this.print("digraph dependency {");
+        var entry, graph, module, value, _i, _len, _ref, _ref1, _ref2;
+        graph = "digraph dependency {\n";
         _ref = this.log;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           entry = _ref[_i];
-          this.print("  " + entry);
+          graph += "  " + entry + "\n";
         }
+        graph += '  # depended modules\n';
         _ref1 = this.depended;
         for (module in _ref1) {
           value = _ref1[module];
-          this.print("  " + module + " [shape = box]");
+          graph += "  " + module + " [shape = box];\n";
         }
-        return this.print("}");
-      },
-      print: function(str) {
-        var _ref;
-        return typeof window !== "undefined" && window !== null ? (_ref = window.console) != null ? typeof _ref.log === "function" ? _ref.log(str) : void 0 : void 0 : void 0;
+        graph += "}";
+        return typeof window !== "undefined" && window !== null ? (_ref2 = window.console) != null ? typeof _ref2.log === "function" ? _ref2.log(graph) : void 0 : void 0 : void 0;
       }
     };
   });
