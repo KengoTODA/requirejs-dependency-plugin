@@ -2,18 +2,21 @@ define () ->
   log: []
   depended: {}
   load: (targetModule, req, load, config) ->
-    @replaceDefine()
+    isBuild = config.isBuild
+    @replaceDefine() if isBuild
     req [targetModule], (value) =>
       load value
-      @restoreDefine()
-      @printDependency targetModule
+      @restoreDefine() if isBuild
   restoreDefine: ->
-    window.define = @amdDefine
+    console.log 'restoring define() method'
+    `define = this.amdDefine`
   replaceDefine: ->
-    @amdDefine = window.define
+    console.log 'replacing define() method'
+    @amdDefine = define
     log = @log
     depended = @depended
-    window.define = (name, deps, callback) =>
+    wrapper = (name, deps, callback) =>
+      console.log 'wrapper is called'
       if (typeof name != "string")
         callback = deps
         deps = name
@@ -24,6 +27,7 @@ define () ->
       rawCallback = callback
       deps.unshift "module"
       callback = (module) ->
+        console.log 'callback is called'
         return rawCallback unless rawCallback.apply?
         args = Array.prototype.slice.call(arguments)
         args.shift() # remove 'module' from args
@@ -34,25 +38,22 @@ define () ->
             depended["\"#{requirejs.toUrl(dep)}.js\""] = true
             log.push "\"#{uri}\"->\"#{requirejs.toUrl(dep)}.js\";"
         rawCallback.apply this, args
+        console.log 'depended is ' + depended
       if name?
-        @amdDefine name, deps, callback
+        @amdDefine.apply require, [name, deps, callback]
       else
-        @amdDefine deps, callback
-  printDependency: (targetModule) ->
+        @amdDefine.apply require, [deps, callback]
+    wrapper.amd = @amdDefine.amd
+    `define = wrapper`
+  buildDependencyGraph: ->
     # see DOT language
     # http://www.graphviz.org/doc/info/lang.html
-    @printInit targetModule
-    @print "digraph dependency {"
-    @print "  #{entry}" for entry in @log
-    @print "  #{module} [shape = box]" for module, value of @depended
-    @print "}"
-  printInit: (targetModule) ->
-    if require.nodeRequire?
-      @fs = require.nodeRequire 'fs'
-      @fileName = "#{targetModule}.dot"
-      @fs.unlinkSync @fileName
-  print: (str) ->
-    if @fs?
-      @fs.appendFileSync @fileName, str
-    else
-      window.console?.log? str
+    graph  = "digraph dependency {"
+    graph += "  #{entry}" for entry in @log
+    graph += "  #{module} [shape = box]" for module, value of @depended
+    graph += "}"
+    return graph
+  writeFile: (pluginName, moduleName, req, write) ->
+    fileName = moduleName + '.dot'
+    graph = @buildDependencyGraph()
+    write fileName, graph

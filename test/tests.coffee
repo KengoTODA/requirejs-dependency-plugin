@@ -13,6 +13,8 @@ asyncTest "dependency plugin replaces define method", 2, () ->
   before = define
   deferred = $.Deferred()
   define "dummy", () ->
+  require.config
+    isBuild: true
   require ["dependency!dummy"], () ->
     notDeepEqual define, before, "define method should be replaced"
     start()
@@ -22,6 +24,8 @@ asyncTest "dependency plugin replaces define method", 2, () ->
     deepEqual before, after, "define method is same to before"
 
 asyncTest "dependency plugin creates log", 2, () ->
+  require.config
+    isBuild: true
   require ["dependency!callar", "dependency"], (callar, dependency) ->
     deepEqual dependency.log, ["\"./callar.js\"->\"./callee.js\";"]
     start()

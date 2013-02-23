@@ -2,9 +2,10 @@
     appDir: ".",
     baseUrl: ".",
     dir: "../example-build",
+    optimizeAllPluginResources: true,
     modules: [
         {
-            name: "main"
+            name: "index"
         }
     ]
 })

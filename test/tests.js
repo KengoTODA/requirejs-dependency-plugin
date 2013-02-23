@@ -20,6 +20,9 @@
     before = define;
     deferred = $.Deferred();
     define("dummy", function() {});
+    require.config({
+      isBuild: true
+    });
     require(["dependency!dummy"], function() {
       notDeepEqual(define, before, "define method should be replaced");
       start();
@@ -32,6 +35,9 @@
   });
 
   asyncTest("dependency plugin creates log", 2, function() {
+    require.config({
+      isBuild: true
+    });
     return require(["dependency!callar", "dependency"], function(callar, dependency) {
       deepEqual(dependency.log, ["\"./callar.js\"->\"./callee.js\";"]);
       return start();
