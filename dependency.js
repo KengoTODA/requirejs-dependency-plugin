@@ -10,7 +10,7 @@
         return req([targetModule], function(value) {
           load(value);
           _this.restoreDefine();
-          return _this.printDependency();
+          return _this.printDependency(targetModule);
         });
       },
       restoreDefine: function() {
@@ -61,8 +61,9 @@
           }
         };
       },
-      printDependency: function() {
+      printDependency: function(targetModule) {
         var entry, module, value, _i, _len, _ref, _ref1;
+        this.printInit(targetModule);
         this.print("digraph dependency {");
         _ref = this.log;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -76,9 +77,20 @@
         }
         return this.print("}");
       },
+      printInit: function(targetModule) {
+        if (require.nodeRequire != null) {
+          this.fs = require.nodeRequire('fs');
+          this.fileName = "" + targetModule + ".dot";
+          return this.fs.unlinkSync(this.fileName);
+        }
+      },
       print: function(str) {
         var _ref;
-        return typeof window !== "undefined" && window !== null ? (_ref = window.console) != null ? typeof _ref.log === "function" ? _ref.log(str) : void 0 : void 0 : void 0;
+        if (this.fs != null) {
+          return this.fs.appendFileSync(this.fileName, str);
+        } else {
+          return (_ref = window.console) != null ? typeof _ref.log === "function" ? _ref.log(str) : void 0 : void 0;
+        }
       }
     };
   });

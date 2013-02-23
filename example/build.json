@@ -1,0 +1,10 @@
+({
+    appDir: ".",
+    baseUrl: ".",
+    dir: "../example-build",
+    modules: [
+        {
+            name: "main"
+        }
+    ]
+})

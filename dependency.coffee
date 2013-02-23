@@ -6,7 +6,7 @@ define () ->
     req [targetModule], (value) =>
       load value
       @restoreDefine()
-      @printDependency()
+      @printDependency targetModule
   restoreDefine: ->
     window.define = @amdDefine
   replaceDefine: ->
@@ -38,12 +38,21 @@ define () ->
         @amdDefine name, deps, callback
       else
         @amdDefine deps, callback
-  printDependency: ->
+  printDependency: (targetModule) ->
     # see DOT language
     # http://www.graphviz.org/doc/info/lang.html
+    @printInit targetModule
     @print "digraph dependency {"
     @print "  #{entry}" for entry in @log
     @print "  #{module} [shape = box]" for module, value of @depended
     @print "}"
+  printInit: (targetModule) ->
+    if require.nodeRequire?
+      @fs = require.nodeRequire 'fs'
+      @fileName = "#{targetModule}.dot"
+      @fs.unlinkSync @fileName
   print: (str) ->
-    window?.console?.log? str
+    if @fs?
+      @fs.appendFileSync @fileName, str
+    else
+      window.console?.log? str
